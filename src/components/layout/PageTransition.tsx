@@ -14,19 +14,20 @@ const variants = {
   exit: { opacity: 0, y: -10 }
 };
 
-// Using a simple transition component since we don't have framer-motion installed
 export const PageTransition: React.FC<PageTransitionProps> = ({ 
   children, 
   className 
 }) => {
   return (
-    <div
-      className={cn(
-        "w-full animate-slide-up opacity-0",
-        className
-      )}
+    <motion.div
+      initial="hidden"
+      animate="enter"
+      exit="exit"
+      variants={variants}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className={cn("w-full", className)}
     >
       {children}
-    </div>
+    </motion.div>
   );
 };
