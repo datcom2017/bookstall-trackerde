@@ -8,9 +8,10 @@ import { CustomButton } from "@/components/ui/CustomButton";
 import { Percent } from "lucide-react";
 
 const Sales = () => {
+  // Use environment variables or configured values for the API settings
   const { getSalesEntries } = useGoogleSheets({
-    sheetId: "your-sheet-id",
-    apiKey: "your-api-key",
+    sheetId: import.meta.env.VITE_GOOGLE_SHEET_ID || "your-sheet-id",
+    apiKey: import.meta.env.VITE_GOOGLE_API_KEY || "your-api-key",
   });
 
   const [view, setView] = useState<"form" | "list">("form");
