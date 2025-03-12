@@ -5,6 +5,7 @@ import { SalesForm } from "@/components/sales/SalesForm";
 import { useGoogleSheets } from "@/hooks/useGoogleSheets";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { CustomButton } from "@/components/ui/CustomButton";
+import { Percent } from "lucide-react";
 
 const Sales = () => {
   const { getSalesEntries } = useGoogleSheets({
@@ -53,6 +54,7 @@ const Sales = () => {
                     <th className="pb-2 font-medium">Book</th>
                     <th className="pb-2 font-medium text-right">Qty</th>
                     <th className="pb-2 font-medium text-right">Price</th>
+                    <th className="pb-2 font-medium text-right">Discount</th>
                     <th className="pb-2 font-medium text-right">Total</th>
                   </tr>
                 </thead>
@@ -64,12 +66,21 @@ const Sales = () => {
                       <td className="py-3">{entry.bookTitle}</td>
                       <td className="py-3 text-right">{entry.quantity}</td>
                       <td className="py-3 text-right">₹{entry.price.toFixed(2)}</td>
+                      <td className="py-3 text-right">
+                        {entry.discountPercentage ? 
+                          <span className="flex items-center justify-end gap-1">
+                            {entry.discountPercentage}
+                            <Percent className="h-3 w-3" />
+                          </span> : 
+                          "-"
+                        }
+                      </td>
                       <td className="py-3 text-right font-medium">₹{entry.total.toFixed(2)}</td>
                     </tr>
                   ))}
                   {salesEntries.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="py-4 text-center text-muted-foreground">
+                      <td colSpan={7} className="py-4 text-center text-muted-foreground">
                         No sales records found
                       </td>
                     </tr>

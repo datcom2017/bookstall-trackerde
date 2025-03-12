@@ -2,6 +2,13 @@
 import { useState, useCallback } from "react";
 import { toast } from "@/components/ui/use-toast";
 
+export type BookInfo = {
+  id: string;
+  title: string;
+  basePrice: number;
+  stock?: number;
+};
+
 export type SalesEntry = {
   id?: string;
   date: string;
@@ -9,6 +16,7 @@ export type SalesEntry = {
   bookTitle: string;
   quantity: number;
   price: number;
+  discountPercentage?: number;
   total: number;
 };
 
@@ -45,6 +53,7 @@ export const useGoogleSheets = ({ sheetId, apiKey }: UseGoogleSheetsProps) => {
       bookTitle: "The Great Gatsby",
       quantity: 1,
       price: 15,
+      discountPercentage: 0,
       total: 15
     },
     {
@@ -54,7 +63,8 @@ export const useGoogleSheets = ({ sheetId, apiKey }: UseGoogleSheetsProps) => {
       bookTitle: "To Kill a Mockingbird",
       quantity: 2,
       price: 12,
-      total: 24
+      discountPercentage: 10,
+      total: 21.6
     }
   ]);
   
@@ -77,6 +87,18 @@ export const useGoogleSheets = ({ sheetId, apiKey }: UseGoogleSheetsProps) => {
       costPrice: 7,
       total: 21
     }
+  ]);
+
+  // Book inventory
+  const [bookInventory] = useState<BookInfo[]>([
+    { id: "1", title: "The Great Gatsby", basePrice: 15, stock: 10 },
+    { id: "2", title: "To Kill a Mockingbird", basePrice: 12, stock: 15 },
+    { id: "3", title: "1984", basePrice: 10, stock: 8 },
+    { id: "4", title: "Pride and Prejudice", basePrice: 9, stock: 12 },
+    { id: "5", title: "The Catcher in the Rye", basePrice: 11, stock: 5 },
+    { id: "6", title: "Lord of the Flies", basePrice: 14, stock: 7 },
+    { id: "7", title: "Animal Farm", basePrice: 8, stock: 20 },
+    { id: "8", title: "The Hobbit", basePrice: 20, stock: 3 },
   ]);
 
   const addSalesEntry = useCallback((entry: SalesEntry) => {
@@ -171,6 +193,10 @@ export const useGoogleSheets = ({ sheetId, apiKey }: UseGoogleSheetsProps) => {
     return totalSales - totalPurchases;
   }, [getTotalSales, getTotalPurchases]);
 
+  const getBooks = useCallback(() => {
+    return bookInventory;
+  }, [bookInventory]);
+
   return {
     isLoading,
     error,
@@ -180,6 +206,7 @@ export const useGoogleSheets = ({ sheetId, apiKey }: UseGoogleSheetsProps) => {
     getPurchaseEntries,
     getTotalSales,
     getTotalPurchases,
-    getProfit
+    getProfit,
+    getBooks
   };
 };
